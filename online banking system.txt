@@ -1,0 +1,39 @@
+""@startuml
+node "Client Device" {
+    [Web Browser]
+    [Mobile App]
+}
+
+node "Web Server" {
+    [Login Service]
+    [Account Management]
+}
+
+node "Application Server" {
+    [Transaction Processing]
+    [Fund Transfer Service]
+    [Notification Service]
+}
+
+node "Database Server" {
+    [User Database]
+    [Account Database]
+    [Transaction Database]
+}
+
+node "Security Server" {
+    [Authentication Service]
+    [Encryption Service]
+}
+
+[Web Browser] --> [Login Service] : HTTP/HTTPS
+[Mobile App] --> [Login Service] : HTTPS
+[Login Service] --> [Authentication Service] : Verify Credentials
+[Login Service] --> [Account Management] : Fetch Account Details
+[Account Management] --> [User Database] : Query User Data
+[Transaction Processing] --> [Transaction Database] : Update Transactions
+[Fund Transfer Service] --> [Account Database] : Update Balances
+[Notification Service] --> [Security Server] : Encrypt Notification
+[Notification Service] --> [Mobile App] : Send Notification
+@enduml
+""
