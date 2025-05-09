@@ -1,0 +1,29 @@
+""@startuml
+[*] --> Form Filling : Start Re-registration
+
+state "Form Filling" {
+    [*] --> Enter Details
+    Enter Details --> Validate Details : Submit Form
+    Validate Details --> Error State : Invalid Data
+    Validate Details --> Payment Processing : Valid Data
+}
+
+state "Payment Processing" {
+    [*] --> Select Payment Method
+    Select Payment Method --> Process Payment : Confirm Method
+    Process Payment --> Payment Success : Payment Approved
+    Process Payment --> Payment Failed : Payment Declined
+}
+
+Payment Success --> Confirmation : Generate Receipt
+Payment Failed --> Error State : Display Error
+
+state "Confirmation" {
+    [*] --> Generate Acknowledgment
+    Generate Acknowledgment --> Send Email Notification
+    Send Email Notification --> [*] : Re-registration Complete
+}
+
+Error State --> [*] : Terminate Process
+@enduml
+""
