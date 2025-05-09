@@ -1,0 +1,26 @@
+""@startuml
+actor User
+participant "Web Portal" as Portal
+participant "Product Catalog" as Catalog
+participant "Shopping Cart" as Cart
+participant "Payment Gateway" as Payment
+participant "Order Management System" as OMS
+participant "Inventory System" as Inventory
+participant "Notification Service" as Notification
+
+User -> Portal: Browse Products
+Portal -> Catalog: Fetch Product List
+Catalog -> Portal: Return Product List
+User -> Portal: Select Product
+Portal -> Cart: Add to Cart
+User -> Portal: Proceed to Checkout
+Portal -> Payment: Initiate Payment
+Payment -> Portal: Confirm Payment
+Portal -> OMS: Place Order
+OMS -> Inventory: Update Stock
+Inventory -> OMS: Stock Updated
+OMS -> Notification: Send Order Confirmation
+Notification -> User: Order Confirmation Sent
+User -> Portal: Log Out
+@enduml
+""
