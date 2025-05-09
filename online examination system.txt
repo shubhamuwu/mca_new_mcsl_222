@@ -1,0 +1,74 @@
+""@startuml
+class User {
+    +userID: int
+    +name: String
+    +email: String
+    +password: String
+    +login(): void
+    +logout(): void
+}
+
+class Student {
+    +studentID: int
+    +enrollCourse(courseID: int): void
+    +attemptExam(examID: int): void
+}
+Student --|> User
+
+class Instructor {
+    +instructorID: int
+    +createExam(exam: Exam): void
+    +gradeExam(examID: int): void
+}
+Instructor --|> User
+
+class Admin {
+    +adminID: int
+    +manageUser(user: User): void
+    +manageCourse(course: Course): void
+    +manageExam(exam: Exam): void
+}
+Admin --|> User
+
+class Course {
+    +courseID: int
+    +courseName: String
+    +description: String
+    +addStudent(studentID: int): void
+    +removeStudent(studentID: int): void
+}
+Course "1" -- "0..*" Student
+Course "1" -- "0..*" Instructor
+
+class Exam {
+    +examID: int
+    +examName: String
+    +totalMarks: int
+    +startTime: DateTime
+    +endTime: DateTime
+    +generateResults(): void
+}
+Exam "1" -- "0..*" Question
+Exam "1" -- "0..*" Student
+
+class Question {
+    +questionID: int
+    +questionText: String
+    +questionType: String
+    +marks: int
+    +getCorrectAnswer(): String
+}
+
+class Result {
+    +resultID: int
+    +studentID: int
+    +examID: int
+    +marksObtained: int
+    +status: String
+    +generateReport(): void
+}
+Student "1" -- "0..*" Result
+Exam "1" -- "0..*" Result
+
+@enduml
+""
