@@ -1,0 +1,74 @@
+""<%@ page import="java.sql.*" %>
+<%@ page import="javax.servlet.*" %>
+<%@ page import="javax.servlet.http.*" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Student Details - IGNOU MCA 1st Semester</title>
+</head>
+<body>
+    <h2>Update Student Information</h2>
+    <form action="updateStudent.jsp" method="post">
+        <label>Enrollment Number or Mobile Number:</label>
+        <input type="text" name="identifier" required /><br><br>
+        
+        <label>New Address:</label>
+        <input type="text" name="address" /><br><br>
+        
+        <label>New Mobile Number:</label>
+        <input type="text" name="mobile_number" /><br><br>
+        
+        <label>New Email ID:</label>
+        <input type="text" name="email_id" /><br><br>
+        
+        <input type="submit" value="Update Details" />
+    </form>
+</body>
+</html>
+
+<!-- updateStudent.jsp -->
+<%@ page import="java.sql.*" %>
+<%
+    String identifier = request.getParameter("identifier");
+    String newAddress = request.getParameter("address");
+    String newMobile = request.getParameter("mobile_number");
+    String newEmail = request.getParameter("email_id");
+
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    String dbURL = "jdbc:mysql://localhost:3306/ignou_db";
+    String user = "root";
+    String pass = "password";
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conn = DriverManager.getConnection(dbURL, user, pass);
+
+        String sql = "UPDATE students SET address = COALESCE(?, address), mobile_number = COALESCE(?, mobile_number), email_id = COALESCE(?, email_id) WHERE enrollment_number = ? OR mobile_number = ?";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, (newAddress.isEmpty() ? null : newAddress));
+        pstmt.setString(2, (newMobile.isEmpty() ? null : newMobile));
+        pstmt.setString(3, (newEmail.isEmpty() ? null : newEmail));
+        pstmt.setString(4, identifier);
+        pstmt.setString(5, identifier);
+
+        int rows = pstmt.executeUpdate();
+        
+        if (rows > 0) {
+            out.println("<h3>Student details updated successfully.</h3>");
+        } else {
+            out.println("<h3>No student found with the provided identifier.</h3>");
+        }
+    } catch (Exception e) {
+        out.println("<h3>Error: " + e.getMessage() + "</h3>");
+    } finally {
+        try {
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException ex) {
+            out.println("<h3>Error closing connection: " + ex.getMessage() + "</h3>");
+        }
+    }
+%>
+""
